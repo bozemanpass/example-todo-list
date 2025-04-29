@@ -2,12 +2,9 @@ name: todo
 description: "Todo"
 containers:
   - name: bpi/todo-frontend
-    ref: bozemanpass/todo-list-app
     path: ./frontend/
   - name: bpi/todo-backend
-    ref: bozemanpass/todo-list-app
     path: ./backend/
 pods:
   - name: todo-list
-    repository: bozemanpass/todo-list-app
     path: .
