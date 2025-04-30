@@ -1,6 +1,6 @@
 # Todo List Application
 
-This project is a simple Todo List application built with React for the frontend and Node.js for the backend, using PostgreSQL as the database.
+This project is a simple Todo List application built with React for the frontend and Node.js for the backend, using PostgreSQL as the database.  It was AI generated using GitHub Copilot.
 
 ## Project Structure
 
