@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/api/todos', todoRoutes);
+app.use('/', todoRoutes);
 
 app.listen(PORT, async () => {
   await sequelize.sync();
