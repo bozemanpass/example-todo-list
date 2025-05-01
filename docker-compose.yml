@@ -1,10 +1,9 @@
-version: '3.8'
 services:
   backend:
     image: bpi/todo-backend:stack
     build: ./backend
     ports:
-      - "5000:5000"
+      - "5000"
     environment:
       DB_HOST: ${STACK_SVC_DB_HOST:-db}
       DB_USER: postgres
@@ -18,9 +17,9 @@ services:
     image: bpi/todo-frontend:stack
     build: ./frontend
     environment:
-      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:5000/api/todos}
+      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:5000}
     ports:
-      - "3000:3000"
+      - "3000"
 
   db:
     image: postgres:15
@@ -35,3 +34,4 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
