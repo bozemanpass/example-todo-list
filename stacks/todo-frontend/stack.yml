@@ -1,0 +1,8 @@
+name: todo
+description: "Todo"
+containers:
+  - name: bpi/todo-frontend
+    path: ./frontend/
+pods:
+  - name: todo-frontend
+    path: ./frontend/
