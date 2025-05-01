@@ -57,7 +57,7 @@ docker login --username "$IMAGE_REGISTRY_USERNAME" --password "$IMAGE_REGISTRY_P
 
 STACK_NAME="example-todo-list"
 STACK_LOCATOR=bozemanpass/example-todo-list
-STACK_PATH="~/bpi/${STACK_NAME}/stacks/todo"
+STACK_PATH="$HOME/bpi/${STACK_NAME}/stacks/todo"
 
 $STACK_CMD fetch stack $STACK_LOCATOR
 $STACK_CMD fetch repositories --stack $STACK_PATH
