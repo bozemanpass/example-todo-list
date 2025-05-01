@@ -1,8 +1,0 @@
-services:
-  frontend:
-    image: bpi/todo-frontend:stack
-    build: ./frontend
-    environment:
-      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:5000/api/todos}
-    ports:
-      - "3000"
