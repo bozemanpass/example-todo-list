@@ -64,12 +64,32 @@ todo-list-app
    npm start
    ```
 
-### Running with Docker
-
-To run the application using Docker, you can use the provided `docker-compose.yml` file. Simply run:
+### Running with Stack
+To download, build, configure, and deploy the application using [stack](https://github.com/bozemanpass/stack/), run:
 
 ```
-docker-compose up
+# clone
+stack fetch stack bozemanpass/example-todo-list
+
+# build
+stack build containers --stack ~/bpi/example-todo-list/stacks/todo
+
+# configure
+stack config init --stack ~/bpi/example-todo-list/stacks/todo --output todo.yml --map-ports-to-host localhost-same
+
+# deploy
+stack deploy --spec-file todo.yml --deployment-dir ~/deployments/todo
+
+# run
+stack manage --dir ~/deployments/todo start
+```
+
+### Running with Docker
+
+To run the application using Docker, you can use the provided `composefile.yml` file. Simply run:
+
+```
+docker compose -f composefile.yml up --build
 ```
 
 This will start both the backend and PostgreSQL database in separate containers.
