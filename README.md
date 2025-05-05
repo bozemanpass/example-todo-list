@@ -16,7 +16,7 @@ todo-list-app
 │   ├── package.json # Frontend dependencies and scripts
 │   ├── tsconfig.json # TypeScript configuration for the frontend
 │   └── README.md    # Documentation for the frontend
-├── docker-compose.yml # Docker configuration for the application
+├── composefile.yml # Stack/Docker configuration for the application
 └── README.md        # Main documentation for the project
 ```
 
