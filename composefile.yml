@@ -3,7 +3,7 @@ services:
     image: bpi/todo-backend:stack
     build: ./backend
     ports:
-      - "5000:5000"
+      - "5000:5000" # @stack http-proxy /api/todos
     environment:
       DB_HOST: ${STACK_SVC_DB:-db}
       DB_USER: postgres
@@ -19,7 +19,7 @@ services:
     environment:
       REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:5000/api/todos}
     ports:
-      - "3000:3000"
+      - "3000:3000" # @stack http-proxy /
 
   db:
     image: postgres:15
