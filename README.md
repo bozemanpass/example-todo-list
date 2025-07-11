@@ -69,13 +69,13 @@ To download, build, configure, and deploy the application using [stack](https://
 
 ```
 # clone
-stack fetch stack bozemanpass/example-todo-list
+stack fetch repo bozemanpass/example-todo-list
 
 # build
-stack build containers --stack ~/bpi/example-todo-list/stacks/todo
+stack prepare --stack todo
 
 # configure
-stack config init --stack ~/bpi/example-todo-list/stacks/todo --output todo.yml --map-ports-to-host localhost-same
+stack init --stack todo --output todo.yml --map-ports-to-host localhost-same
 
 # deploy
 stack deploy --spec-file todo.yml --deployment-dir ~/deployments/todo
