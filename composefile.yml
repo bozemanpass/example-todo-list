@@ -1,6 +1,6 @@
 services:
   backend:
-    image: bpi/todo-backend:stack
+    image: bozemanpass/todo-backend:stack
     build: ./backend
     ports:
       - "5000:5000" # @stack http-proxy /api/todos
@@ -14,7 +14,7 @@ services:
         condition: service_healthy
 
   frontend:
-    image: bpi/todo-frontend:stack
+    image: bozemanpass/todo-frontend:stack
     build: ./frontend
     environment:
       REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:5000/api/todos}
