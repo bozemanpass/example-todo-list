@@ -22,18 +22,21 @@ services:
       - "3000:3000" # @stack http-proxy /
 
   db:
-    image: postgres:15
+    image: postgres:14
+    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: todoapp
-    ports:
-      - "5432:5432"
+    entrypoint: bash
+    command: -c  'usermod -u ${STACK_HOST_UID:-1000} postgres;groupmod -g ${STACK_HOST_GID:-1000} postgres;exec /usr/local/bin/docker-entrypoint.sh postgres -c log_statement=all -c log_destination=stderr'
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
+    ports:
+      - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
 
