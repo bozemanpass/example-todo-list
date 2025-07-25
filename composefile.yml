@@ -17,7 +17,7 @@ services:
     image: bozemanpass/todo-frontend:stack
     build: ./frontend
     environment:
-      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:5000/api/todos}
+      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:5000}
     ports:
       - "3000:3000" # @stack http-proxy /
 
