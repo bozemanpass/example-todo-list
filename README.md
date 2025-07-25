@@ -1,6 +1,6 @@
 # Todo List Application
 
-This project is a simple Todo List application built with React for the frontend and Node.js for the backend, using PostgreSQL as the database.  It was AI generated using GitHub Copilot.
+This project shows how to use the [stack](https://github.com/bozemanpass/stack) tool to build and deploy a simple Todo List application built with React for the frontend and Node.js for the backend, using PostgreSQL as the database.  It was AI generated using GitHub Copilot.
 
 ## Project Structure
 
@@ -18,6 +18,31 @@ todo-list-app
 │   └── README.md    # Documentation for the frontend
 ├── composefile.yml # Stack/Docker configuration for the application
 └── README.md        # Main documentation for the project
+```
+
+## System Diagram
+This diagram was auto-generated with the `stack diagram` command:
+```mermaid
+flowchart RL
+  todo-backend-http>:5000]:::http_target
+  todo-frontend-http>:3000]:::http_target
+  todo-backend-http --> todo-backend
+  todo-frontend-http --> todo-frontend
+  subgraph todo [todo]
+    todo-backend[[backend]]:::http_service
+    todo-frontend[[frontend]]:::http_service
+    todo-db[[db]]:::service
+    todo-db-volume-db-data:/var/lib/postgresql/data(db-data:/var/lib/postgresql/data):::volume
+    todo-db --> todo-db-volume-db-data:/var/lib/postgresql/data
+  end
+  classDef super_stack stroke:#FFF176,fill:#FFFEEF,color:#6B5E13,stroke-width:2px,font-size:small;
+  classDef stack stroke:#00C9A7,fill:#EDFDFB,color:#1A3A38,stroke-width:2px,font-size:small;
+  classDef service stroke:#43E97B,fill:#F5FFF7,color:#236247,stroke-width:2px;
+  classDef http_service stroke:#FFB236,fill:#FFFAF4,color:#7A5800,stroke-width:2px;
+  classDef http_target stroke:#FF6363,fill:#FFF5F5,color:#7C2323,stroke-width:2px;
+  classDef port stroke:#26C6DA,fill:#E6FAFB,color:#074953,stroke-width:2px,font-size:x-small;
+  classDef volume stroke:#A259DF,fill:#F4EEFB,color:#320963,stroke-width:2px,font-size:x-small;
+  class todo stack;
 ```
 
 ## Getting Started
