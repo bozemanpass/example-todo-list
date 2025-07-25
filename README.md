@@ -21,7 +21,7 @@ todo-list-app
 ```
 
 ## System Diagram
-This diagram was auto-generated with the `stack diagram` command:
+This diagram was auto-generated with the `stack chart` command:
 ```mermaid
 flowchart RL
   todo-backend-http>:5000]:::http_target
