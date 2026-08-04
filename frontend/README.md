@@ -6,7 +6,7 @@ This is a simple Todo List application built with React for the frontend and Nod
 
 ### Prerequisites
 
-- Node.js (version 14 or higher)
+- Node.js (version 20.19 or higher)
 - npm (Node package manager)
 - PostgreSQL (version 12 or higher)
 

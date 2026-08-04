@@ -12,11 +12,14 @@ export const createTodo = async (req: Request, res: Response) => {
   res.status(201).json(newTodo);
 };
 
-export const updateTodo = async (req: Request, res: Response) => {
+export const updateTodo = async (req: Request<{ id: string }>, res: Response) => {
   const { id } = req.params;
   const { title, completed } = req.body;
   const todo = await Todo.findByPk(id);
-  if (!todo) return res.status(404).json({ message: 'Todo not found' });
+  if (!todo) {
+    res.status(404).json({ message: 'Todo not found' });
+    return;
+  }
 
   // Update only the fields provided in the request body
   if (title !== undefined) todo.title = title;
@@ -26,10 +29,13 @@ export const updateTodo = async (req: Request, res: Response) => {
   res.json(todo);
 };
 
-export const deleteTodo = async (req: Request, res: Response) => {
+export const deleteTodo = async (req: Request<{ id: string }>, res: Response) => {
   const { id } = req.params;
   const todo = await Todo.findByPk(id);
-  if (!todo) return res.status(404).json({ message: 'Todo not found' });
+  if (!todo) {
+    res.status(404).json({ message: 'Todo not found' });
+    return;
+  }
 
   await todo.destroy();
   res.status(204).send();
