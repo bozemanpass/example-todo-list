@@ -37,7 +37,7 @@ To start the backend server, run:
 npm run start
 ```
 
-The server will be running on `http://localhost:3000`.
+The server will be running on `http://localhost:5000` (override with `PORT`).
 
 ### API Endpoints
 
