@@ -1,8 +1,11 @@
 name: todo
 description: "Todo"
 containers:
+  # The frontend has no container build of its own: the 'webapp' wrapper builds
+  # the Vite app and serves the result as static content.
   - name: bozemanpass/todo-frontend
-    path: ./frontend/
+    wrapper: webapp
+    content-root: frontend
   - name: bozemanpass/todo-backend
     path: ./backend/
 pods:
