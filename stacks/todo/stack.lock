@@ -1,0 +1,4 @@
+wrappers:
+  webapp:
+    ref: github.com/bozemanpass/stack-wrapper-webapp
+    hash: e2cd2268b42f556cb72cc8d2f5764cc0718b377b

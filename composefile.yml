@@ -15,11 +15,12 @@ services:
 
   frontend:
     image: bozemanpass/todo-frontend:stack
-    build: ./frontend
     environment:
-      VITE_API_URL: ${VITE_API_URL:-http://localhost:5000}
+      # Substituted into the built assets at container start by the wrapper;
+      # see frontend/.env.production.
+      API_URL: ${API_URL:-http://localhost:5000}
     ports:
-      - "3000:3000" # @stack http-proxy /
+      - "3000:80" # @stack http-proxy /
 
   db:
     image: postgres:14
