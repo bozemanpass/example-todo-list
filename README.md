@@ -49,7 +49,7 @@ flowchart RL
 
 ### Prerequisites
 
-- Node.js
+- Node.js (version 20.19 or higher)
 - PostgreSQL
 - Docker (optional, for running with Docker)
 

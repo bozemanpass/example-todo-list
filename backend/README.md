@@ -6,7 +6,7 @@ This is the backend of the Todo List application, built using Node.js and TypeSc
 
 ### Prerequisites
 
-- Node.js (version 14 or higher)
+- Node.js (version 20 or higher)
 - PostgreSQL (version 12 or higher)
 
 ### Installation

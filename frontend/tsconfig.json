@@ -1,14 +1,19 @@
 {
   "compilerOptions": {
-    "target": "ES6", // Target modern JavaScript
+    "target": "ES2022", // Target modern JavaScript
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext", // Use ESNext modules for React
-    "moduleResolution": "Node", // Resolve modules in Node.js style
+    "moduleResolution": "Bundler", // Vite resolves modules like a bundler
     "jsx": "react-jsx", // Use the new JSX transform
     "strict": true, // Enable strict type-checking options
     "esModuleInterop": true, // Allow default imports from CommonJS modules
     "skipLibCheck": true, // Skip type checking of declaration files
-    "forceConsistentCasingInFileNames": true // Enforce consistent casing in imports
+    "forceConsistentCasingInFileNames": true, // Enforce consistent casing in imports
+    "isolatedModules": true, // Vite transpiles each file independently
+    "noEmit": true, // Vite handles emit; tsc is used for type-checking only
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true
   },
-  "include": ["src/**/*"], // Include all files in the src directory
-  "exclude": ["node_modules", "build"] // Exclude unnecessary directories
+  "include": ["src/**/*", "vite.config.ts"], // Include all files in the src directory
+  "exclude": ["node_modules", "dist"] // Exclude unnecessary directories
 }
