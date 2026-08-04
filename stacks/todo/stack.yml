@@ -6,8 +6,11 @@ containers:
   - name: bozemanpass/todo-frontend
     wrapper: webapp
     content-root: frontend
+  # The backend is a long-running node service, not static content, so it uses the
+  # 'node-service' wrapper rather than 'webapp'.
   - name: bozemanpass/todo-backend
-    path: ./backend/
+    wrapper: node-service
+    content-root: backend
 pods:
   - name: todo-list
     path: .
