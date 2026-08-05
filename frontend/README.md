@@ -43,7 +43,8 @@ This is a simple Todo List application built with React for the frontend and Nod
 This app has no Dockerfile. Its container is built by the `webapp`
 [wrapper](https://github.com/bozemanpass/stack/blob/main/docs/wrappers.md), declared in
 `stacks/todo/stack.yml`: the wrapper runs `npm ci && npm run build` and serves the
-resulting `dist/` as static content on port 80.
+resulting `dist/` as static content. The wrapper defaults to port 80; `composefile.yml`
+sets `STACK_LISTEN_PORT: 3000` so it matches the published host port.
 
 Because Vite inlines `import.meta.env.*` at build time, the API URL cannot be an
 ordinary runtime variable. `.env.production` instead bakes in a placeholder that the
