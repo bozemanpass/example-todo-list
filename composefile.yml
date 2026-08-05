@@ -21,8 +21,13 @@ services:
       # Substituted into the built assets at container start by the wrapper;
       # see frontend/.env.production.
       API_URL: ${API_URL:-http://localhost:5000}
+      # The webapp wrapper serves on port 80 by default; move it to 3000 so the
+      # host and container ports agree.  A mismatched mapping ("3000:80") does
+      # not survive the '*-same' --map-ports-to-host recipes, which key off the
+      # container port and would silently republish this on port 80.
+      STACK_LISTEN_PORT: 3000
     ports:
-      - "3000:80" # @stack http-proxy /
+      - "3000:3000" # @stack http-proxy /
 
   db:
     image: postgres:14
