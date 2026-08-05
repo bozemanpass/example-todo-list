@@ -17,3 +17,7 @@ export const updateTodo = async (id: number, updates: Partial<Todo>): Promise<To
   const response = await axios.put(`${API_URL}/${id}`, updates);
   return response.data;
 };
+
+export const deleteTodo = async (id: number): Promise<void> => {
+  await axios.delete(`${API_URL}/${id}`);
+};
