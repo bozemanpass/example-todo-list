@@ -9,19 +9,37 @@ updated and enhanced by Claude Code.
 
 ```
 todo-list-app
-├── backend          # Backend application
-│   ├── src         # Source files for the backend
-│   ├── package.json # Backend dependencies and scripts
-│   ├── tsconfig.json # TypeScript configuration for the backend
-│   └── README.md    # Documentation for the backend
-├── frontend         # Frontend application
-│   ├── src         # Source files for the frontend
-│   ├── package.json # Frontend dependencies and scripts
-│   ├── tsconfig.json # TypeScript configuration for the frontend
-│   └── README.md    # Documentation for the frontend
-├── composefile.yml # Stack/Docker configuration for the application
-└── README.md        # Main documentation for the project
+├── backend               # Backend application (Node.js/Express)
+│   ├── src               # Source files for the backend
+│   ├── package.json      # Backend dependencies and scripts
+│   ├── tsconfig.json     # TypeScript configuration for the backend
+│   └── README.md         # Documentation for the backend
+├── frontend              # Frontend application (React/Vite)
+│   ├── src               # Source files for the frontend
+│   ├── public            # Static assets (icons, manifest, robots.txt)
+│   ├── .env.production   # Build-time env; holds the runtime-substituted API URL
+│   ├── package.json      # Frontend dependencies and scripts
+│   ├── tsconfig.json     # TypeScript configuration for the frontend
+│   ├── vite.config.ts    # Vite build configuration
+│   └── README.md         # Documentation for the frontend
+├── stacks
+│   └── todo              # The stack definition for the whole application
+│       ├── stack.yml     # Containers, wrappers and pods making up the stack
+│       └── stack.lock    # Pinned wrapper versions, written by `stack prepare`
+├── composefile.yml       # The stack's pod: frontend, backend and PostgreSQL
+├── tests
+│   ├── e2e               # End-to-end test: deploys the stack, drives a browser
+│   └── lib               # Shell helpers shared by the test and the demo
+├── demo                  # Scripts that record the animation at the top of this page
+├── docs/images           # Images used by the documentation
+├── .github/workflows     # CI: runs the end-to-end test on every push
+└── README.md             # Main documentation for the project
 ```
+
+Neither application has a Dockerfile: the stack builds each one with a
+[wrapper](https://github.com/bozemanpass/stack-wrapper-webapp) named in
+`stacks/todo/stack.yml` — `webapp` for the static frontend, `node-service` for the
+long-running backend.
 
 ## System Diagram
 This diagram was auto-generated with the `stack chart` command:
@@ -52,9 +70,14 @@ flowchart RL
 
 ### Prerequisites
 
+To deploy the application as a stack (the usual path, see
+[Running with Stack](#running-with-stack)) all you need is Docker and
+[stack](https://github.com/bozemanpass/stack/) itself.
+
+To run the backend and frontend directly on your machine instead, you also need:
+
 - Node.js (version 20.19 or higher)
 - PostgreSQL
-- Docker (optional, for running with Docker)
 
 ### Backend Setup
 
@@ -111,16 +134,6 @@ stack deploy --spec-file todo.yml --deployment-dir ~/deployments/todo
 # run
 stack manage --dir ~/deployments/todo start
 ```
-
-### Running with Docker
-
-To run the application using Docker, you can use the provided `composefile.yml` file. Simply run:
-
-```
-docker compose -f composefile.yml up --build
-```
-
-This will start both the backend and PostgreSQL database in separate containers.
 
 ## Testing
 
