@@ -1,0 +1,63 @@
+name: End-to-end Test
+
+# Deploy this application as a stack and drive it through a headless browser.
+# The screenshots the browser takes are uploaded as a build artifact, so the
+# result of a run can be checked visually as well as read.
+
+on:
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: "Deploy the stack and exercise it in a browser"
+    runs-on: ubuntu-24.04
+    steps:
+      - name: "Clone project repository"
+        uses: actions/checkout@v5
+
+      # The test deploys the checkout above with a released stack, rather than
+      # one built from source: this repo is a consumer of the tool, so the
+      # version to test against is the one a user would have.
+      - name: "Install stack"
+        run: |
+          mkdir -p $HOME/bin
+          curl -L -o $HOME/bin/stack https://github.com/bozemanpass/stack/releases/latest/download/stack
+          chmod +x $HOME/bin/stack
+          echo "$HOME/bin" >> $GITHUB_PATH
+
+      - name: "Run end-to-end test"
+        env:
+          # "Enable debug logging" on a re-run sets runner.debug; pass it through
+          # so the test script turns on xtrace and dumps its environment.
+          STACK_SCRIPT_DEBUG: ${{ runner.debug }}
+        run: ./tests/e2e/run-e2e-test.sh
+
+      # Uploaded even when the test fails: the screenshot taken at the point of
+      # failure is usually the quickest explanation of what went wrong.
+      - name: "Upload browser screenshots"
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-screenshots
+          path: tests/e2e/results/
+          if-no-files-found: warn
+
+      - name: "Note where the screenshots are"
+        if: always()
+        run: |
+          {
+            echo "## Browser screenshots"
+            echo
+            echo "Download the **browser-screenshots** artifact from this run's summary page to see how the deployed application looked:"
+            echo
+            for f in tests/e2e/results/*.png; do
+              [ -e "$f" ] || continue
+              echo "- \`$( basename "$f" )\`"
+            done
+          } >> $GITHUB_STEP_SUMMARY

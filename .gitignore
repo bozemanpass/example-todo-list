@@ -1,2 +1,4 @@
 node_modules/
 dist/
+# Screenshots and other output from tests/e2e/run-e2e-test.sh
+tests/e2e/results/
