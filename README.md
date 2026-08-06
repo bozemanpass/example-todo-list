@@ -119,6 +119,31 @@ docker compose -f composefile.yml up --build
 
 This will start both the backend and PostgreSQL database in separate containers.
 
+## Testing
+
+`tests/e2e/run-e2e-test.sh` is an end-to-end test: it deploys this repo's working
+copy as a stack, to a local docker compose deployment, and then drives the
+deployed application through a headless browser -- adding todos, completing one,
+reloading the page to check they were really stored, and deleting them again.
+
+```
+./tests/e2e/run-e2e-test.sh
+```
+
+It needs `docker`, `curl`, `jq`, and a `stack` on the PATH (see
+[releases](https://github.com/bozemanpass/stack/releases); set `STACK` to test a
+different one).  The browser runs in the official Playwright container image, so
+nothing else has to be installed.  Ports 3000, 5000 and 5432 must be free.
+
+The browser takes screenshots as it goes -- and one more at the point of failure,
+if it fails -- into `tests/e2e/results/`.  It also fetches every icon the page
+declares (the favicons and the apple-touch-icon), fails if one is missing, and
+saves them there too: a screenshot captures the page, not the browser's tab
+strip, so it cannot show a favicon.  The same test runs in CI
+(`.github/workflows/test-e2e.yml`), where that directory is uploaded as the
+`browser-screenshots` build artifact, so how the application actually looked can
+be checked from the run's summary page.
+
 ## API Endpoints
 
 The backend provides the following API endpoints for managing todos:
