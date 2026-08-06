@@ -2,7 +2,8 @@
 
 ![The todo app, deployed as a stack to local Docker, with todos being added, checked off and deleted](./docs/images/todo-app.gif)
 
-This project shows how to use the [stack](https://github.com/bozemanpass/stack) tool to build and deploy a simple Todo List application built with React for the frontend and Node.js for the backend, using PostgreSQL as the database.  It was AI generated using GitHub Copilot.
+This project shows how to use the [stack](https://github.com/bozemanpass/stack) tool to build and deploy a simple Todo List application built with React for the frontend and Node.js for the backend, using PostgreSQL as the database.  It was AI generated originally using GitHub Copilot then subsequently 
+updated and enhanced by Claude Code.
 
 ## Project Structure
 
