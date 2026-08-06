@@ -8,11 +8,12 @@
 // neither a developer nor a CI runner needs Playwright or a browser installed.
 //
 // Configured by environment:
-//   APP_URL         the deployed frontend (default http://localhost:3000)
-//   SCREENSHOT_DIR  where the screenshots are written (default ./screenshots)
+//   APP_URL      the deployed frontend (default http://localhost:3000)
+//   RESULTS_DIR  where screenshots and fetched icons are written
+//                (default ./results)
 
 import { createRequire } from 'node:module';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 // The container image ships the browsers but not the npm package, so the runner
@@ -23,7 +24,7 @@ const require = createRequire(import.meta.url);
 const { chromium } = require('playwright-core');
 
 const APP_URL = process.env.APP_URL || 'http://localhost:3000';
-const SCREENSHOT_DIR = process.env.SCREENSHOT_DIR || 'screenshots';
+const RESULTS_DIR = process.env.RESULTS_DIR || 'results';
 
 // Distinct titles, so that an assertion matching one cannot be satisfied by the
 // other -- or by a leftover todo from an earlier run against the same volume.
@@ -42,7 +43,7 @@ let shotNumber = 0;
 async function screenshot(page, name) {
     shotNumber += 1;
     const file = path.join(
-        SCREENSHOT_DIR,
+        RESULTS_DIR,
         `${String(shotNumber).padStart(2, '0')}-${name}.png`,
     );
     await page.screenshot({ path: file, fullPage: true });
@@ -58,6 +59,56 @@ function todoItem(page, title) {
     return page.locator('.todo-item').filter({ hasText: title });
 }
 
+// Check every icon the page declares -- favicons, the apple-touch-icon -- and
+// save what came back next to the screenshots.
+//
+// A screenshot cannot show any of this: page.screenshot() captures the page,
+// not the browser's tab strip, so a favicon that never made it into the
+// deployed image looks exactly like one that did.  Fetching the icons the page
+// actually asks for is both a real assertion and, via the saved files, a way to
+// look at them in the CI artifact.
+//
+// The check that matters most is the content type.  The frontend is served as a
+// single-page app, so an icon path that is missing from the image does not 404:
+// it falls back to index.html and returns 200 with a page of HTML.
+async function checkIcons(page) {
+    const icons = await page
+        .locator('link[rel~="icon"], link[rel~="apple-touch-icon"]')
+        .evaluateAll((links) => links.map((link) => ({ rel: link.rel, href: link.href })));
+
+    if (icons.length === 0) {
+        fail('the page declares no icon links at all');
+    }
+
+    for (const icon of icons) {
+        // Fetched through the browser context, so it goes to the same origin
+        // with the same cookies as the page's own requests.
+        const response = await page.request.get(icon.href, { timeout: TIMEOUT });
+        const contentType = response.headers()['content-type'] || '(none)';
+
+        if (!response.ok()) {
+            fail(`icon ${icon.href} (rel="${icon.rel}"): HTTP ${response.status()}`);
+        }
+        if (!contentType.startsWith('image/')) {
+            fail(
+                `icon ${icon.href} (rel="${icon.rel}"): served as ${contentType}, not an image` +
+                ' -- most likely it is missing and the single-page-app fallback returned index.html',
+            );
+        }
+
+        const body = await response.body();
+        if (body.length === 0) {
+            fail(`icon ${icon.href} (rel="${icon.rel}"): served an empty body`);
+        }
+
+        const file = path.join(RESULTS_DIR, `icon-${path.basename(new URL(icon.href).pathname)}`);
+        await writeFile(file, body);
+        console.log(
+            `icon rel="${icon.rel}" ${icon.href}: ${contentType}, ${body.length} bytes -> ${file}`,
+        );
+    }
+}
+
 async function addTodo(page, title) {
     await page.getByLabel('New todo title').fill(title);
     await page.getByRole('button', { name: 'Add' }).click();
@@ -66,7 +117,7 @@ async function addTodo(page, title) {
 }
 
 async function main() {
-    await mkdir(SCREENSHOT_DIR, { recursive: true });
+    await mkdir(RESULTS_DIR, { recursive: true });
 
     const browser = await chromium.launch();
     // A fixed viewport keeps the screenshots comparable between runs, and wide
@@ -99,6 +150,7 @@ async function main() {
         }
 
         await screenshot(page, 'initial');
+        await checkIcons(page);
 
         // --- create ---------------------------------------------------------
         await addTodo(page, TODO_A);

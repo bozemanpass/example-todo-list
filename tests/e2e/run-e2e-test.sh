@@ -16,7 +16,7 @@
 #
 # Environment:
 #   STACK              stack executable to test (default: "stack")
-#   E2E_RESULTS_DIR    where screenshots are written
+#   E2E_RESULTS_DIR    where screenshots and the app's icons are written
 #                      (default: tests/e2e/results)
 #   PLAYWRIGHT_VERSION Playwright version; picks both the container image tag
 #                      and the npm package, which have to agree
@@ -102,7 +102,7 @@ docker run --rm \
     --user "$( id -u ):$( id -g )" \
     -e HOME=/tmp \
     -e APP_URL="$FRONTEND_URL" \
-    -e SCREENSHOT_DIR=/results \
+    -e RESULTS_DIR=/results \
     -e NODE_PATH=/tmp/pw/node_modules \
     -e PLAYWRIGHT_VERSION="$PLAYWRIGHT_VERSION" \
     -v "$SCRIPT_DIR/browser-test.mjs":/browser-test.mjs:ro \
@@ -113,7 +113,7 @@ docker run --rm \
            && node /browser-test.mjs'
 
 echo "browser test: passed"
-echo "Screenshots written to: $RESULTS_DIR"
+echo "Screenshots and icons written to: $RESULTS_DIR"
 ls -l "$RESULTS_DIR"
 
 # --- what the browser did, seen from the API ---------------------------------
