@@ -44,24 +44,23 @@ long-running backend.
 ## System Diagram
 This diagram was auto-generated with the `stack chart` command:
 ```mermaid
-flowchart RL
-  todo-backend-http>:5000]:::http_target
-  todo-frontend-http>:3000]:::http_target
+flowchart LR
+  todo-backend-http>":5000 (/api/todos)"]:::http_target
+  todo-frontend-http>":3000 (/)"]:::http_target
   todo-backend-http --> todo-backend
   todo-frontend-http --> todo-frontend
   subgraph todo [todo]
     todo-backend[[backend]]:::http_service
     todo-frontend[[frontend]]:::http_service
     todo-db[[db]]:::service
-    todo-db-volume-db-data:/var/lib/postgresql/data(db-data:/var/lib/postgresql/data):::volume
-    todo-db --> todo-db-volume-db-data:/var/lib/postgresql/data
+    todo-db-volume-db-data(db-data):::volume
+    todo-db --> |/var/lib/postgresql/data|todo-db-volume-db-data
+    todo-backend --> todo-db
   end
-  classDef super_stack stroke:#FFF176,fill:#FFFEEF,color:#6B5E13,stroke-width:2px,font-size:small;
   classDef stack stroke:#00C9A7,fill:#EDFDFB,color:#1A3A38,stroke-width:2px,font-size:small;
   classDef service stroke:#43E97B,fill:#F5FFF7,color:#236247,stroke-width:2px;
   classDef http_service stroke:#FFB236,fill:#FFFAF4,color:#7A5800,stroke-width:2px;
   classDef http_target stroke:#FF6363,fill:#FFF5F5,color:#7C2323,stroke-width:2px;
-  classDef port stroke:#26C6DA,fill:#E6FAFB,color:#074953,stroke-width:2px,font-size:x-small;
   classDef volume stroke:#A259DF,fill:#F4EEFB,color:#320963,stroke-width:2px,font-size:x-small;
   class todo stack;
 ```
