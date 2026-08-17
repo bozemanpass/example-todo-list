@@ -14,3 +14,9 @@ containers:
 pods:
   - name: todo-list
     path: .
+# The database password is a declared secret: a value is generated at deploy time and
+# injected into every container, so the backend and the database agree on it without it
+# being written anywhere.  The backend reads the same POSTGRES_PASSWORD name the
+# postgres image does (see backend/src/database/index.ts).
+secrets:
+  POSTGRES_PASSWORD:
