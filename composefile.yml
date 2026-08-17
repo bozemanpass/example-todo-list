@@ -9,7 +9,9 @@ services:
       STACK_LISTEN_PORT: 5000
       DB_HOST: db
       DB_USER: postgres
-      DB_PASSWORD: password
+      # The password is not set here: stack.yml declares POSTGRES_PASSWORD a secret,
+      # so a generated value is injected into every container -- this one and the
+      # database alike, which is what keeps the two in agreement.
       DB_NAME: todoapp
     depends_on:
       db:
@@ -34,7 +36,7 @@ services:
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      # POSTGRES_PASSWORD is a declared secret; see stack.yml.
       POSTGRES_DB: todoapp
     entrypoint: bash
     command: -c  'usermod -u ${STACK_HOST_UID:-1000} postgres;groupmod -g ${STACK_HOST_GID:-1000} postgres;exec /usr/local/bin/docker-entrypoint.sh postgres -c log_statement=all -c log_destination=stderr'
