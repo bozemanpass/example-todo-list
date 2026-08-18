@@ -5,3 +5,5 @@ wrappers:
   node-service:
     ref: github.com/bozemanpass/stack-wrapper-webapp
     hash: 1f76c479dfef769ca8bbb9ac0cde86a2a66f5269
+images:
+  postgres:14: sha256:caf49e3b10d377aa2cfee478591d623808527beb27125d38797b418013f72d81
